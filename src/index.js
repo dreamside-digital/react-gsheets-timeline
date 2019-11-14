@@ -1,5 +1,3 @@
 import Timeline from './components/Timeline';
 
-export {
-  Timeline
-}
+export default Timeline
