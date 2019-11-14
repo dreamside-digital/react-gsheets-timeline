@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import axios from 'axios'
 import { map } from 'lodash';
 
+import "@fortawesome/fontawesome-free/css/all.css"
 import "../assets/scss/timeline.scss"
 
 const defaultConfig = {
-
+  icons: [<i className="fas fa-circle" />, <i className="fas fa-square" />, <i className="fas fa-star" />],
+  colors: ["darkcyan", "darkslateblue", "firebrick"]
 }
-
 
 
 class Timeline extends React.Component {
@@ -19,6 +20,7 @@ class Timeline extends React.Component {
       orderedEvents: [],
       ready: false
     }
+    this.config = { ...defaultConfig, ...this.props.config }
   }
 
   componentDidMount() {
@@ -58,7 +60,7 @@ class Timeline extends React.Component {
         let rows = [...res.data.values]
         rows.shift()
         const events = rows.map(row => {
-          let item = { sheetId: sheetId, sheetOrder: index + 1 }
+          let item = { sheetId: sheetId, sheetOrder: index }
           headings.map((heading, index) => {
             item[heading] = row[index]
           })
@@ -68,7 +70,7 @@ class Timeline extends React.Component {
         this.setState({
           timelines: {
             ...this.state.timelines,
-            [sheetId]: { ...this.state.timelines[sheetId], show: true, events: events, sheetOrder: index + 1 }
+            [sheetId]: { ...this.state.timelines[sheetId], show: true, events: events, sheetOrder: index }
           },
           ready: true
         })
@@ -108,8 +110,12 @@ class Timeline extends React.Component {
             <h3>Legend</h3>
             {
               map(this.state.timelines, (timeline, sheetId) => {
+                const color = this.props.config[sheetId] && this.props.config[sheetId].color ? this.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length]
+                const icon = this.props.config[sheetId] && this.props.config[sheetId].icon ? this.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length]
+
                 return (
                   <p className={`timeline${timeline.sheetOrder}`} key={sheetId}>
+                    <span className="bullet-icon" style={{ color }}>{icon}</span>
                     <span className={`${timeline.show ? "" : "text-muted"}`}>{sheetId}</span>
                     {timeline.show ?
                       <span className={`toggle-timeline text-muted`} onClick={this.handleHideTimeline(sheetId)}>(hide)</span>:
@@ -139,12 +145,19 @@ class Timeline extends React.Component {
 
               const startDate = new Date(year, month, day)
               const endDate = endYear ? new Date(endYear, endMonth, endDay) : null
+
               const highlight = event["Highlight"] == "TRUE" ? "highlight" : ""
+              const color = this.props.config[event.sheetId] && this.props.config[event.sheetId].color ? this.props.config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length]
+              const eventStyle = event["Highlight"] == "TRUE" ? { background: color } : {}
+
+              const icon = this.props.config[event.sheetId] && this.props.config[event.sheetId].icon ? this.props.config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length]
+              const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
 
               return(
-                <li key={`event-${index}`} className={`timeline${event.sheetOrder}`}>
-                  <div className={`event ${highlight}`}>
+                <li key={`event-${index}`}>
+                  <div className="bullet-icon" style={{ color }}>{icon}</div>
+                  <div className={`event ${highlight}`} style={ eventStyle }>
                     <div className="dates">
                       <div className="year">{startDate.getFullYear()}</div>
                       <div className="month">
@@ -153,7 +166,7 @@ class Timeline extends React.Component {
                       {
                         endDate &&
                         <div>
-                          <div className="hyphen"><i className="fas fa-caret-down"></i></div>
+                          <div className="hyphen"><i className="fas fa-minus" /></div>
                           <div className="year">{endDate.getFullYear()}</div>
                           <div className="month">
                             <span>{(Boolean(event['End Month']) && Boolean(event["End Day"])) && `${endDate.toLocaleDateString('default', {month: 'short', day: 'numeric'})}` || Boolean(event['End Month']) && `${endDate.toLocaleDateString('default', {month: 'short'})}` || null}</span>
@@ -164,7 +177,7 @@ class Timeline extends React.Component {
 
                     <div className="info">
                       <div className="headline">
-                        <strong>{event['Headline']}</strong>
+                        <h4>{event['Headline']}</h4>
                       </div>
                       <div className="description">
                         {event['Text']}
@@ -173,7 +186,7 @@ class Timeline extends React.Component {
                       {
                         event["Link"] &&
                         <div className="description">
-                          <a href={event["Link"]} target="_blank" rel="noopener"><i className="fas fa-external-link-alt"></i>{Boolean(event['Link text']) ? event['Link text'] : "More information"}</a>
+                          <a href={event["Link"]} target="_blank" rel="noopener"><i className="fas fa-external-link-alt"></i><span className="link-text">{linkText}<span className="underline" /></span></a>
                         </div>
                       }
                     </div>
@@ -192,13 +205,14 @@ Timeline.propTypes = {
   spreadsheetId: PropTypes.string.isRequired,
   sheets: PropTypes.array.isRequired,
   apiKey: PropTypes.string.isRequired,
-
+  config: PropTypes.object,
 }
 
 Timeline.defaultProps = {
   spreadsheetId: '1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ',
   sheets: ["Toy Story Movies"],
-  apiKey: ""
+  apiKey: "",
+  config: {},
 }
 
 export default Timeline;

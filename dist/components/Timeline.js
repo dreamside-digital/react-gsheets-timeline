@@ -22,6 +22,8 @@ var _axios2 = _interopRequireDefault(_axios);
 
 var _lodash = require("lodash");
 
+require("@fortawesome/fontawesome-free/css/all.css");
+
 require("../assets/scss/timeline.scss");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36,7 +38,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var defaultConfig = {};
+var defaultConfig = {
+  icons: [_react2.default.createElement("i", { className: "fas fa-circle" }), _react2.default.createElement("i", { className: "fas fa-square" }), _react2.default.createElement("i", { className: "fas fa-star" })],
+  colors: ["darkcyan", "darkslateblue", "firebrick"]
+};
 
 var Timeline = function (_React$Component) {
   _inherits(Timeline, _React$Component);
@@ -55,6 +60,7 @@ var Timeline = function (_React$Component) {
       orderedEvents: [],
       ready: false
     };
+    _this.config = _extends({}, defaultConfig, _this.props.config);
     return _this;
   }
 
@@ -107,7 +113,7 @@ var Timeline = function (_React$Component) {
           var rows = [].concat(_toConsumableArray(res.data.values));
           rows.shift();
           var events = rows.map(function (row) {
-            var item = { sheetId: sheetId, sheetOrder: index + 1 };
+            var item = { sheetId: sheetId, sheetOrder: index };
             headings.map(function (heading, index) {
               item[heading] = row[index];
             });
@@ -115,7 +121,7 @@ var Timeline = function (_React$Component) {
           });
 
           _this4.setState({
-            timelines: _extends({}, _this4.state.timelines, _defineProperty({}, sheetId, _extends({}, _this4.state.timelines[sheetId], { show: true, events: events, sheetOrder: index + 1 }))),
+            timelines: _extends({}, _this4.state.timelines, _defineProperty({}, sheetId, _extends({}, _this4.state.timelines[sheetId], { show: true, events: events, sheetOrder: index }))),
             ready: true
           });
         }).catch(function (err) {
@@ -164,9 +170,17 @@ var Timeline = function (_React$Component) {
             "Legend"
           ),
           (0, _lodash.map)(this.state.timelines, function (timeline, sheetId) {
+            var color = _this5.props.config[sheetId] && _this5.props.config[sheetId].color ? _this5.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length];
+            var icon = _this5.props.config[sheetId] && _this5.props.config[sheetId].icon ? _this5.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length];
+
             return _react2.default.createElement(
               "p",
               { className: "timeline" + timeline.sheetOrder, key: sheetId },
+              _react2.default.createElement(
+                "span",
+                { className: "bullet-icon", style: { color: color } },
+                icon
+              ),
               _react2.default.createElement(
                 "span",
                 { className: "" + (timeline.show ? "" : "text-muted") },
@@ -210,14 +224,25 @@ var Timeline = function (_React$Component) {
 
               var startDate = new Date(year, month, day);
               var endDate = endYear ? new Date(endYear, endMonth, endDay) : null;
+
               var highlight = event["Highlight"] == "TRUE" ? "highlight" : "";
+              var color = _this5.props.config[event.sheetId] && _this5.props.config[event.sheetId].color ? _this5.props.config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length];
+              var eventStyle = event["Highlight"] == "TRUE" ? { background: color } : {};
+
+              var icon = _this5.props.config[event.sheetId] && _this5.props.config[event.sheetId].icon ? _this5.props.config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length];
+              var linkText = Boolean(event['Link text']) ? event['Link text'] : "More information";
 
               return _react2.default.createElement(
                 "li",
-                { key: "event-" + index, className: "timeline" + event.sheetOrder },
+                { key: "event-" + index },
                 _react2.default.createElement(
                   "div",
-                  { className: "event " + highlight },
+                  { className: "bullet-icon", style: { color: color } },
+                  icon
+                ),
+                _react2.default.createElement(
+                  "div",
+                  { className: "event " + highlight, style: eventStyle },
                   _react2.default.createElement(
                     "div",
                     { className: "dates" },
@@ -241,7 +266,7 @@ var Timeline = function (_React$Component) {
                       _react2.default.createElement(
                         "div",
                         { className: "hyphen" },
-                        _react2.default.createElement("i", { className: "fas fa-caret-down" })
+                        _react2.default.createElement("i", { className: "fas fa-minus" })
                       ),
                       _react2.default.createElement(
                         "div",
@@ -266,7 +291,7 @@ var Timeline = function (_React$Component) {
                       "div",
                       { className: "headline" },
                       _react2.default.createElement(
-                        "strong",
+                        "h4",
                         null,
                         event['Headline']
                       )
@@ -283,7 +308,12 @@ var Timeline = function (_React$Component) {
                         "a",
                         { href: event["Link"], target: "_blank", rel: "noopener" },
                         _react2.default.createElement("i", { className: "fas fa-external-link-alt" }),
-                        Boolean(event['Link text']) ? event['Link text'] : "More information"
+                        _react2.default.createElement(
+                          "span",
+                          { className: "link-text" },
+                          linkText,
+                          _react2.default.createElement("span", { className: "underline" })
+                        )
                       )
                     )
                   )
@@ -304,14 +334,15 @@ var Timeline = function (_React$Component) {
 Timeline.propTypes = {
   spreadsheetId: _propTypes2.default.string.isRequired,
   sheets: _propTypes2.default.array.isRequired,
-  apiKey: _propTypes2.default.string.isRequired
-
+  apiKey: _propTypes2.default.string.isRequired,
+  config: _propTypes2.default.object
 };
 
 Timeline.defaultProps = {
   spreadsheetId: '1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ',
   sheets: ["Toy Story Movies"],
-  apiKey: ""
+  apiKey: "",
+  config: {}
 };
 
 exports.default = Timeline;
