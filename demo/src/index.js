@@ -7,17 +7,17 @@ import Timeline from '../../src/components/Timeline';
 import "./index.scss"
 
 const config = {
-  "Colonial Timeline": {
-    icon: <i className="fas fa-paw"></i>,
-    color: "#2f6165",
+  "Toy Story Movies": {
+    icon: <i className="fas fa-hat-cowboy-side"></i>,
+    color: "#129bd3",
   },
-  "Company Timeline": {
-    icon: <i className="fas fa-feather"></i>,
-    color: "#b46547"
+  "Jurassic Park Movies": {
+    icon: <i className="fas fa-dragon"></i>,
+    color: "darkgreen"
   },
-  "Land Cessation Treaties": {
-    icon: <i className="fas fa-fish"></i>,
-    color: "#423243"
+  "Spiderman Movies": {
+    icon: <i className="fas fa-spider"></i>,
+    color: "darkred"
   }
 }
 
@@ -28,9 +28,27 @@ const App = props => (
       <div className="flex-container">
         <div className="flex-item desc">
           <h1>Timeline Demo</h1>
+          <p>Source spreadsheet: <a href="https://docs.google.com/spreadsheets/d/1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ/edit?usp=sharing">https://docs.google.com/spreadsheets/d/1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ/edit?usp=sharing</a></p>
+        </div>
+      </div>
+
+      <div className="flex-container">
+        <div className="flex-item desc">
+          <h2>Default Configuration</h2>
           <Timeline
-            spreadsheetId={"1PtqsSJq3wl09Q_IW-pgxSiXSLMYxDcrOeda7AMCM5Js"}
-            sheets={["Colonial Timeline", "Company Timeline", "Land Cessation Treaties"]}
+            spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
+            sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
+            apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
+          />
+        </div>
+      </div>
+
+      <div className="flex-container">
+        <div className="flex-item desc">
+          <h2>Custom Configuration</h2>
+          <Timeline
+            spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
+            sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
             config={config}
           />
