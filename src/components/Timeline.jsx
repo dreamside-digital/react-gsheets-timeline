@@ -8,7 +8,7 @@ import "../assets/scss/timeline.scss"
 
 const defaultConfig = {
   icons: [<i className="fas fa-circle" />, <i className="fas fa-square" />, <i className="fas fa-star" />],
-  colors: ["darkcyan", "darkslateblue", "firebrick"]
+  colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
 }
 
 const Counter = ({ event, index }) => {
@@ -43,7 +43,7 @@ const Event = ({ event, index, config }) => {
   const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
   return(
-    <li key={`event-${index}`} className="event">
+    <li key={`event-${index}`} className="event" tabIndex={0}>
       <div className="bullet-icon" style={{ color }}>{icon}</div>
       <div className={`card ${highlight}`} style={ eventStyle }>
         <div className="dates">
@@ -229,7 +229,7 @@ class Timeline extends React.Component {
             }
           </div>
 
-          <div className="timeline">
+          <div className={`timeline ${this.props.alignRight ? "align-right" : ""}`}>
             <h3>Events</h3>
             <ul>
             {eventList.map((event, index) => {

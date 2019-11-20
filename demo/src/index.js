@@ -101,8 +101,9 @@ render() {
             spreadsheetId={"1PtqsSJq3wl09Q_IW-pgxSiXSLMYxDcrOeda7AMCM5Js"}
             sheets={["Colonial Timeline", "Company Timeline", "Land Cessation Treaties"]}
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
-            interval={1}
-            startYear={1993}
+            interval={5}
+            startYear={1760}
+            alignRight={true}
             config={config}
           />
         </div>
