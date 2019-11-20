@@ -98,8 +98,8 @@ render() {
 
 
           <Timeline
-            spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
-            sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
+            spreadsheetId={"1PtqsSJq3wl09Q_IW-pgxSiXSLMYxDcrOeda7AMCM5Js"}
+            sheets={["Colonial Timeline", "Company Timeline", "Land Cessation Treaties"]}
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
             interval={1}
             startYear={1993}

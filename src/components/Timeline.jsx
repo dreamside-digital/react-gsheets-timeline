@@ -63,6 +63,7 @@ const Event = ({ event, index, config }) => {
           }
         </div>
 
+
         <div className="info">
           <div className="headline">
             <h4>{event['Headline']}</h4>
@@ -78,6 +79,13 @@ const Event = ({ event, index, config }) => {
             </div>
           }
         </div>
+
+        {
+          event["Image URL"] &&
+          <div className="image-container hide-on-mobile">
+            <img src={event["Image URL"]} alt={event["Image description"]} className="image" />
+          </div>
+        }
       </div>
     </li>
   )
