@@ -18,7 +18,7 @@ const config = {
   "Spiderman Movies": {
     icon: <i className="fas fa-spider"></i>,
     color: "darkred"
-  }
+  },
 }
 
 
@@ -35,6 +35,22 @@ const App = props => (
       <div className="flex-container">
         <div className="flex-item desc">
           <h2>Default Configuration</h2>
+          <pre>
+            <code>
+              {`
+render() {
+  return(
+    <Timeline
+      spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
+      sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
+      apiKey={"YOUR_API_KEY"}
+    />
+  )
+}
+              `}
+            </code>
+          </pre>
+
           <Timeline
             spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
             sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
@@ -46,10 +62,47 @@ const App = props => (
       <div className="flex-container">
         <div className="flex-item desc">
           <h2>Custom Configuration</h2>
+
+          <pre>
+            <code>
+              {`
+render() {
+
+  const config = {
+    "Toy Story Movies": {
+      icon: <i className="fas fa-hat-cowboy-side"></i>,
+      color: "#129bd3",
+    },
+    "Jurassic Park Movies": {
+      icon: <i className="fas fa-dragon"></i>,
+      color: "darkgreen"
+    },
+    "Spiderman Movies": {
+      icon: <i className="fas fa-spider"></i>,
+      color: "darkred"
+    }
+  }
+
+  return(
+    <Timeline
+      spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
+      sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
+      apiKey={"YOUR_API_KEY"}
+      config={config}
+    />
+  )
+}
+              `}
+            </code>
+          </pre>
+
+
           <Timeline
             spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
             sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
+            interval={1}
+            startYear={1993}
             config={config}
           />
         </div>
