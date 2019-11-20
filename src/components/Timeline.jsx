@@ -37,15 +37,15 @@ const Event = ({ event, index, config }) => {
 
   const highlight = event["Highlight"] == "TRUE" ? "highlight" : ""
   const color = config[event.sheetId] && config[event.sheetId].color ? config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length]
-  const eventStyle = event["Highlight"] == "TRUE" ? { background: color, ['--event-color']: color } : {['--event-color']: color }
+  const styleProperties = {['--timeline-color']: color }
 
   const icon = config[event.sheetId] && config[event.sheetId].icon ? config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length]
   const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
   return(
-    <li key={`event-${index}`} className="event" tabIndex={0}>
-      <div className="bullet-icon" style={{ color }}>{icon}</div>
-      <div className={`card ${highlight}`} style={ eventStyle }>
+    <li key={`event-${index}`} className="event" tabIndex={0} style={ styleProperties }>
+      <div className="bullet-icon">{icon}</div>
+      <div className={`card ${highlight}`}>
         <div className="dates">
           <div className="year">{startDate.getFullYear()}</div>
           <div className="month">
@@ -214,10 +214,11 @@ class Timeline extends React.Component {
               map(this.state.timelines, (timeline, sheetId) => {
                 const color = this.props.config[sheetId] && this.props.config[sheetId].color ? this.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length]
                 const icon = this.props.config[sheetId] && this.props.config[sheetId].icon ? this.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length]
+                const styleProperties = {['--timeline-color']: color }
 
                 return (
-                  <p className={`timeline${timeline.sheetOrder}`} key={sheetId}>
-                    <span className="bullet-icon" style={{ color }}>{icon}</span>
+                  <p className={`timeline${timeline.sheetOrder}`} key={sheetId} style={styleProperties}>
+                    <span className="bullet-icon">{icon}</span>
                     <span className={`${timeline.show ? "" : "text-muted"}`}>{sheetId}</span>
                     {timeline.show ?
                       <span className={`toggle-timeline text-muted`} onClick={this.handleHideTimeline(sheetId)}>(hide)</span>:
