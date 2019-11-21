@@ -174,7 +174,7 @@ class Timeline extends React.Component {
       }
     })
 
-    if (this.props.interval) {
+    if (allEvents.length > 0 && this.props.interval) {
       const endYear = allEvents[allEvents.length - 1]["Year"]
       let year = this.props.startYear
       while (year < endYear) {

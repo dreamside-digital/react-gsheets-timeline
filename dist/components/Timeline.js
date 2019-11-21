@@ -30,17 +30,153 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var defaultConfig = {
   icons: [_react2.default.createElement("i", { className: "fas fa-circle" }), _react2.default.createElement("i", { className: "fas fa-square" }), _react2.default.createElement("i", { className: "fas fa-star" })],
-  colors: ["darkcyan", "darkslateblue", "firebrick"]
+  colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
+};
+
+var Counter = function Counter(_ref) {
+  var event = _ref.event,
+      index = _ref.index;
+
+  return _react2.default.createElement(
+    "li",
+    { key: "event-" + index, className: "interval-marker" },
+    _react2.default.createElement(
+      "div",
+      { className: "counter-icon" },
+      _react2.default.createElement("i", { className: "fas fa-minus" })
+    )
+  );
+};
+
+var Event = function Event(_ref2) {
+  var event = _ref2.event,
+      index = _ref2.index,
+      config = _ref2.config;
+
+  if (!event['Year']) {
+    return null;
+  }
+
+  var year = event['Year'];
+  var month = Boolean(event['Month']) ? parseInt(event['Month']) - 1 : null;
+  var day = Boolean(event['Day']) ? parseInt(event['Day']) : null;
+
+  var endYear = Boolean(event['End Year']) ? parseInt(event['End Year']) : null;
+  var endMonth = Boolean(event['End Month']) ? parseInt(event['End Month']) + 1 : null;
+  var endDay = Boolean(event['End Day']) ? parseInt(event['End Day']) : null;
+
+  var startDate = new Date(year, month, day);
+  var endDate = endYear ? new Date(endYear, endMonth, endDay) : null;
+
+  var highlight = event["Highlight"] == "TRUE" ? "highlight" : "";
+  var color = config[event.sheetId] && config[event.sheetId].color ? config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length];
+  var styleProperties = _defineProperty({}, '--timeline-color', color);
+
+  var icon = config[event.sheetId] && config[event.sheetId].icon ? config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length];
+  var linkText = Boolean(event['Link text']) ? event['Link text'] : "More information";
+
+  return _react2.default.createElement(
+    "li",
+    { key: "event-" + index, className: "event", tabIndex: 0, style: styleProperties },
+    _react2.default.createElement(
+      "div",
+      { className: "bullet-icon" },
+      icon
+    ),
+    _react2.default.createElement(
+      "div",
+      { className: "card " + highlight },
+      _react2.default.createElement(
+        "div",
+        { className: "dates" },
+        _react2.default.createElement(
+          "div",
+          { className: "year" },
+          startDate.getFullYear()
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "month" },
+          _react2.default.createElement(
+            "span",
+            null,
+            Boolean(event['Month']) && Boolean(event["Day"]) && "" + startDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['Month']) && "" + startDate.toLocaleDateString('default', { month: 'short' }) || null
+          )
+        ),
+        endDate && _react2.default.createElement(
+          "div",
+          null,
+          _react2.default.createElement(
+            "div",
+            { className: "hyphen" },
+            _react2.default.createElement("i", { className: "fas fa-minus" })
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "year" },
+            endDate.getFullYear()
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "month" },
+            _react2.default.createElement(
+              "span",
+              null,
+              Boolean(event['End Month']) && Boolean(event["End Day"]) && "" + endDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['End Month']) && "" + endDate.toLocaleDateString('default', { month: 'short' }) || null
+            )
+          )
+        )
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "info" },
+        _react2.default.createElement(
+          "div",
+          { className: "headline" },
+          _react2.default.createElement(
+            "h4",
+            null,
+            event['Headline']
+          )
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "description" },
+          event['Text']
+        ),
+        event["Link"] && _react2.default.createElement(
+          "div",
+          { className: "description" },
+          _react2.default.createElement(
+            "a",
+            { href: event["Link"], target: "_blank", rel: "noopener" },
+            _react2.default.createElement("i", { className: "fas fa-external-link-alt" }),
+            _react2.default.createElement(
+              "span",
+              { className: "link-text" },
+              linkText,
+              _react2.default.createElement("span", { className: "underline" })
+            )
+          )
+        )
+      ),
+      event["Image URL"] && _react2.default.createElement(
+        "div",
+        { className: "image-container hide-on-mobile" },
+        _react2.default.createElement("img", { src: event["Image URL"], alt: event["Image description"], className: "image" })
+      )
+    )
+  );
 };
 
 var Timeline = function (_React$Component) {
@@ -57,7 +193,8 @@ var Timeline = function (_React$Component) {
 
     _this.state = {
       timelines: {},
-      orderedEvents: [],
+      eventList: [],
+      intervalMarkers: [],
       ready: false
     };
     _this.config = _extends({}, defaultConfig, _this.props.config);
@@ -73,7 +210,7 @@ var Timeline = function (_React$Component) {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState) {
       if (prevState.timelines !== this.state.timelines) {
-        this.orderEvents();
+        this.orderEvents(this.generateEventList());
       }
     }
   }, {
@@ -113,9 +250,13 @@ var Timeline = function (_React$Component) {
           var rows = [].concat(_toConsumableArray(res.data.values));
           rows.shift();
           var events = rows.map(function (row) {
-            var item = { sheetId: sheetId, sheetOrder: index };
+            var item = { sheetId: sheetId, sheetOrder: index, type: "event" };
             headings.map(function (heading, index) {
-              item[heading] = row[index];
+              if (heading === "Year") {
+                item[heading] = parseInt(row[index]);
+              } else {
+                item[heading] = row[index];
+              }
             });
             return item;
           });
@@ -130,8 +271,10 @@ var Timeline = function (_React$Component) {
       });
     }
   }, {
-    key: "orderEvents",
-    value: function orderEvents() {
+    key: "generateEventList",
+    value: function generateEventList() {
+      var _this5 = this;
+
       var allEvents = [];
       (0, _lodash.map)(this.state.timelines, function (timeline, sheetId) {
         if (timeline.show) {
@@ -139,20 +282,42 @@ var Timeline = function (_React$Component) {
         }
       });
 
-      var orderedEvents = allEvents.sort(function (a, b) {
-        return parseInt(a["Year"]) - parseInt(b["Year"]);
+      if (allEvents.length > 0 && this.props.interval) {
+        (function () {
+          var endYear = allEvents[allEvents.length - 1]["Year"];
+          var year = _this5.props.startYear;
+          while (year < endYear) {
+            var eventThisYear = allEvents.find(function (e) {
+              return e["Year"] === year;
+            });
+            if (!eventThisYear) {
+              allEvents = allEvents.concat({ type: "counter", Year: year });
+            }
+            year = year + _this5.props.interval;
+          }
+        })();
+      }
+
+      return allEvents;
+    }
+  }, {
+    key: "orderEvents",
+    value: function orderEvents(events) {
+      var eventList = events.sort(function (a, b) {
+        return a["Year"] - b["Year"];
       });
-      this.setState({ orderedEvents: orderedEvents });
+      this.setState({ eventList: eventList });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this6 = this;
 
       var _state = this.state,
-          orderedEvents = _state.orderedEvents,
+          eventList = _state.eventList,
           ready = _state.ready;
 
+      console.log(eventList);
 
       if (!ready) {
         return _react2.default.createElement("div", null);
@@ -170,15 +335,16 @@ var Timeline = function (_React$Component) {
             "Legend"
           ),
           (0, _lodash.map)(this.state.timelines, function (timeline, sheetId) {
-            var color = _this5.props.config[sheetId] && _this5.props.config[sheetId].color ? _this5.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length];
-            var icon = _this5.props.config[sheetId] && _this5.props.config[sheetId].icon ? _this5.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length];
+            var color = _this6.props.config[sheetId] && _this6.props.config[sheetId].color ? _this6.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length];
+            var icon = _this6.props.config[sheetId] && _this6.props.config[sheetId].icon ? _this6.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length];
+            var styleProperties = _defineProperty({}, '--timeline-color', color);
 
             return _react2.default.createElement(
               "p",
-              { className: "timeline" + timeline.sheetOrder, key: sheetId },
+              { className: "timeline" + timeline.sheetOrder, key: sheetId, style: styleProperties },
               _react2.default.createElement(
                 "span",
-                { className: "bullet-icon", style: { color: color } },
+                { className: "bullet-icon" },
                 icon
               ),
               _react2.default.createElement(
@@ -188,11 +354,11 @@ var Timeline = function (_React$Component) {
               ),
               timeline.show ? _react2.default.createElement(
                 "span",
-                { className: "toggle-timeline text-muted", onClick: _this5.handleHideTimeline(sheetId) },
+                { className: "toggle-timeline text-muted", onClick: _this6.handleHideTimeline(sheetId) },
                 "(hide)"
               ) : _react2.default.createElement(
                 "span",
-                { className: "toggle-timeline", onClick: _this5.handleShowTimeline(sheetId) },
+                { className: "toggle-timeline", onClick: _this6.handleShowTimeline(sheetId) },
                 "(show)"
               )
             );
@@ -200,7 +366,7 @@ var Timeline = function (_React$Component) {
         ),
         _react2.default.createElement(
           "div",
-          { className: "timeline" },
+          { className: "timeline " + (this.props.alignRight ? "align-right" : "") },
           _react2.default.createElement(
             "h3",
             null,
@@ -209,116 +375,11 @@ var Timeline = function (_React$Component) {
           _react2.default.createElement(
             "ul",
             null,
-            orderedEvents.map(function (event, index) {
-              if (!event['Year']) {
-                return null;
+            eventList.map(function (event, index) {
+              if (event.type === "counter") {
+                return _react2.default.createElement(Counter, { event: event, index: index });
               }
-
-              var year = parseInt(event['Year']);
-              var month = Boolean(event['Month']) ? parseInt(event['Month']) + 1 : null;
-              var day = Boolean(event['Day']) ? parseInt(event['Day']) : null;
-
-              var endYear = Boolean(event['End Year']) ? parseInt(event['End Year']) : null;
-              var endMonth = Boolean(event['End Month']) ? parseInt(event['End Month']) + 1 : null;
-              var endDay = Boolean(event['End Day']) ? parseInt(event['End Day']) : null;
-
-              var startDate = new Date(year, month, day);
-              var endDate = endYear ? new Date(endYear, endMonth, endDay) : null;
-
-              var highlight = event["Highlight"] == "TRUE" ? "highlight" : "";
-              var color = _this5.props.config[event.sheetId] && _this5.props.config[event.sheetId].color ? _this5.props.config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length];
-              var eventStyle = event["Highlight"] == "TRUE" ? { background: color } : {};
-
-              var icon = _this5.props.config[event.sheetId] && _this5.props.config[event.sheetId].icon ? _this5.props.config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length];
-              var linkText = Boolean(event['Link text']) ? event['Link text'] : "More information";
-
-              return _react2.default.createElement(
-                "li",
-                { key: "event-" + index },
-                _react2.default.createElement(
-                  "div",
-                  { className: "bullet-icon", style: { color: color } },
-                  icon
-                ),
-                _react2.default.createElement(
-                  "div",
-                  { className: "event " + highlight, style: eventStyle },
-                  _react2.default.createElement(
-                    "div",
-                    { className: "dates" },
-                    _react2.default.createElement(
-                      "div",
-                      { className: "year" },
-                      startDate.getFullYear()
-                    ),
-                    _react2.default.createElement(
-                      "div",
-                      { className: "month" },
-                      _react2.default.createElement(
-                        "span",
-                        null,
-                        Boolean(event['Month']) && Boolean(event["Day"]) && "" + startDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['Month']) && "" + startDate.toLocaleDateString('default', { month: 'short' }) || null
-                      )
-                    ),
-                    endDate && _react2.default.createElement(
-                      "div",
-                      null,
-                      _react2.default.createElement(
-                        "div",
-                        { className: "hyphen" },
-                        _react2.default.createElement("i", { className: "fas fa-minus" })
-                      ),
-                      _react2.default.createElement(
-                        "div",
-                        { className: "year" },
-                        endDate.getFullYear()
-                      ),
-                      _react2.default.createElement(
-                        "div",
-                        { className: "month" },
-                        _react2.default.createElement(
-                          "span",
-                          null,
-                          Boolean(event['End Month']) && Boolean(event["End Day"]) && "" + endDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['End Month']) && "" + endDate.toLocaleDateString('default', { month: 'short' }) || null
-                        )
-                      )
-                    )
-                  ),
-                  _react2.default.createElement(
-                    "div",
-                    { className: "info" },
-                    _react2.default.createElement(
-                      "div",
-                      { className: "headline" },
-                      _react2.default.createElement(
-                        "h4",
-                        null,
-                        event['Headline']
-                      )
-                    ),
-                    _react2.default.createElement(
-                      "div",
-                      { className: "description" },
-                      event['Text']
-                    ),
-                    event["Link"] && _react2.default.createElement(
-                      "div",
-                      { className: "description" },
-                      _react2.default.createElement(
-                        "a",
-                        { href: event["Link"], target: "_blank", rel: "noopener" },
-                        _react2.default.createElement("i", { className: "fas fa-external-link-alt" }),
-                        _react2.default.createElement(
-                          "span",
-                          { className: "link-text" },
-                          linkText,
-                          _react2.default.createElement("span", { className: "underline" })
-                        )
-                      )
-                    )
-                  )
-                )
-              );
+              return _react2.default.createElement(Event, { event: event, index: index, config: _this6.props.config });
             })
           )
         )
