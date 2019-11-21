@@ -1,6 +1,6 @@
 {
   "name": "react-ghseets-timeline",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React component for a timeline that pulls data from a google spreadsheet",
   "keywords": "react, timeline, google spreadsheet",
   "main": "./dist/index.js",
