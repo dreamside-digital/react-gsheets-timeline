@@ -14,15 +14,16 @@
     p {
 
       .bullet-icon {
-        height: 26px;
-        width: 26px;
-        font-size: 24px;
+        height: 32px;
+        width: 32px;
+        font-size: 20px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         margin-right: 20px;
         flex-shrink: 0;
         background-color: #ffffff;
+        border-radius: 32px;
 
         i {
           color: var(--timeline-color);
@@ -59,14 +60,15 @@
       .bullet-icon {
         margin-left: -15px;
         margin-right: 20px;
-        height: 26px;
-        width: 26px;
-        font-size: 24px;
+        height: 32px;
+        width: 32px;
+        font-size: 20px;
         display: flex;
         flex-shrink: 0;
         justify-content: center;
         align-items: center;
         background-color: #ffffff;
+        border-radius: 32px;
 
         i {
           color: var(--timeline-color);
