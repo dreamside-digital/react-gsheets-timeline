@@ -378,13 +378,13 @@ var Timeline = function (_React$Component) {
             null,
             eventList.map(function (event, index) {
               if (event.type === "counter") {
-                return _react2.default.createElement(Counter, { event: event, index: index });
+                return _react2.default.createElement(Counter, { event: event, index: index, key: "event-" + index });
               }
 
               var color = _this6.config[event.sheetId] && _this6.config[event.sheetId].color ? _this6.config[event.sheetId].color : _this6.config.defaults.colors[event.sheetOrder % _this6.config.defaults.colors.length];
               var icon = _this6.config[event.sheetId] && _this6.config[event.sheetId].icon ? _this6.config[event.sheetId].icon : _this6.config.defaults.icons[event.sheetOrder % _this6.config.defaults.icons.length];
 
-              return _react2.default.createElement(Event, { event: event, index: index, color: color, icon: icon });
+              return _react2.default.createElement(Event, { key: "event-" + index, event: event, index: index, color: color, icon: icon });
             })
           )
         )

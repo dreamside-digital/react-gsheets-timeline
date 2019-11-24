@@ -235,13 +235,13 @@ class Timeline extends React.Component {
             <ul>
             {eventList.map((event, index) => {
               if (event.type === "counter") {
-                return <Counter event={event} index={index} />
+                return <Counter event={event} index={index} key={`event-${index}`} />
               }
 
               const color = this.config[event.sheetId] && this.config[event.sheetId].color ? this.config[event.sheetId].color : this.config.defaults.colors[event.sheetOrder % this.config.defaults.colors.length]
               const icon = this.config[event.sheetId] && this.config[event.sheetId].icon ? this.config[event.sheetId].icon : this.config.defaults.icons[event.sheetOrder % this.config.defaults.icons.length]
 
-              return <Event event={event} index={index} color={color} icon={icon} />
+              return <Event key={`event-${index}`} event={event} index={index} color={color} icon={icon} />
             })}
             </ul>
           </div>
