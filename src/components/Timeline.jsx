@@ -7,8 +7,10 @@ import "@fortawesome/fontawesome-free/css/all.css"
 import "../assets/scss/timeline.scss"
 
 const defaultConfig = {
-  icons: [<i className="fas fa-circle" />, <i className="fas fa-square" />, <i className="fas fa-star" />],
-  colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
+  defaults: {
+    icons: [<i className="fas fa-circle" />, <i className="fas fa-square" />, <i className="fas fa-star" />],
+    colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
+  }
 }
 
 const Counter = ({ event, index }) => {
@@ -19,7 +21,7 @@ const Counter = ({ event, index }) => {
   )
 }
 
-const Event = ({ event, index, config }) => {
+const Event = ({ event, index, color, icon }) => {
   if (!event['Year']) {
     return null
   }
@@ -36,16 +38,14 @@ const Event = ({ event, index, config }) => {
   const endDate = endYear ? new Date(endYear, endMonth, endDay) : null
 
   const highlight = event["Highlight"] == "TRUE" ? "highlight" : ""
-  const color = config[event.sheetId] && config[event.sheetId].color ? config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length]
   const styleProperties = {['--timeline-color']: color }
 
-  const icon = config[event.sheetId] && config[event.sheetId].icon ? config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length]
   const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
   return(
     <li key={`event-${index}`} className="event" tabIndex={0} style={ styleProperties }>
       <div className="bullet-icon">{icon}</div>
-      <div className={`card ${highlight}`}>
+      <div className={`tl-item ${highlight}`}>
         <div className="dates">
           <div className="year">{startDate.getFullYear()}</div>
           <div className="month">
@@ -175,14 +175,15 @@ class Timeline extends React.Component {
     })
 
     if (allEvents.length > 0 && this.props.interval) {
+      const interval = parseInt(this.props.interval);
       const endYear = allEvents[allEvents.length - 1]["Year"]
-      let year = this.props.startYear
+      let year = parseInt(this.props.startYear)
       while (year < endYear) {
         const eventThisYear = allEvents.find(e => e["Year"] === year)
         if (!eventThisYear) {
           allEvents = allEvents.concat({ type: "counter", Year: year})
         }
-        year = year + this.props.interval
+        year = year + interval
       }
     }
 
@@ -200,7 +201,6 @@ class Timeline extends React.Component {
 
   render() {
     const { eventList, ready } = this.state;
-    console.log(eventList)
 
     if (!ready) {
       return <div />
@@ -212,8 +212,8 @@ class Timeline extends React.Component {
             <h3>Legend</h3>
             {
               map(this.state.timelines, (timeline, sheetId) => {
-                const color = this.props.config[sheetId] && this.props.config[sheetId].color ? this.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length]
-                const icon = this.props.config[sheetId] && this.props.config[sheetId].icon ? this.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length]
+                const color = this.config[sheetId] && this.config[sheetId].color ? this.config[sheetId].color : this.config.defaults.colors[timeline.sheetOrder % this.config.defaults.colors.length]
+                const icon = this.config[sheetId] && this.config[sheetId].icon ? this.config[sheetId].icon : this.config.defaults.icons[timeline.sheetOrder % this.config.defaults.icons.length]
                 const styleProperties = {['--timeline-color']: color }
 
                 return (
@@ -230,14 +230,18 @@ class Timeline extends React.Component {
             }
           </div>
 
-          <div className={`timeline ${this.props.alignRight ? "align-right" : ""}`}>
+          <div className={`timeline ${this.props.alignment === "right" ? "align-right" : ""}`}>
             <h3>Events</h3>
             <ul>
             {eventList.map((event, index) => {
               if (event.type === "counter") {
                 return <Counter event={event} index={index} />
               }
-              return <Event event={event} index={index} config={this.props.config} />
+
+              const color = this.config[event.sheetId] && this.config[event.sheetId].color ? this.config[event.sheetId].color : this.config.defaults.colors[event.sheetOrder % this.config.defaults.colors.length]
+              const icon = this.config[event.sheetId] && this.config[event.sheetId].icon ? this.config[event.sheetId].icon : this.config.defaults.icons[event.sheetOrder % this.config.defaults.icons.length]
+
+              return <Event event={event} index={index} color={color} icon={icon} />
             })}
             </ul>
           </div>
@@ -251,6 +255,9 @@ Timeline.propTypes = {
   sheets: PropTypes.array.isRequired,
   apiKey: PropTypes.string.isRequired,
   config: PropTypes.object,
+  alignment: PropTypes.string,
+  interval: PropTypes.number,
+  startYear: PropTypes.number,
 }
 
 Timeline.defaultProps = {
@@ -258,6 +265,7 @@ Timeline.defaultProps = {
   sheets: ["Toy Story Movies"],
   apiKey: "",
   config: {},
+  alignment: "left",
 }
 
 export default Timeline;

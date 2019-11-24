@@ -39,8 +39,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var defaultConfig = {
-  icons: [_react2.default.createElement("i", { className: "fas fa-circle" }), _react2.default.createElement("i", { className: "fas fa-square" }), _react2.default.createElement("i", { className: "fas fa-star" })],
-  colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
+  defaults: {
+    icons: [_react2.default.createElement("i", { className: "fas fa-circle" }), _react2.default.createElement("i", { className: "fas fa-square" }), _react2.default.createElement("i", { className: "fas fa-star" })],
+    colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
+  }
 };
 
 var Counter = function Counter(_ref) {
@@ -61,7 +63,8 @@ var Counter = function Counter(_ref) {
 var Event = function Event(_ref2) {
   var event = _ref2.event,
       index = _ref2.index,
-      config = _ref2.config;
+      color = _ref2.color,
+      icon = _ref2.icon;
 
   if (!event['Year']) {
     return null;
@@ -79,10 +82,8 @@ var Event = function Event(_ref2) {
   var endDate = endYear ? new Date(endYear, endMonth, endDay) : null;
 
   var highlight = event["Highlight"] == "TRUE" ? "highlight" : "";
-  var color = config[event.sheetId] && config[event.sheetId].color ? config[event.sheetId].color : defaultConfig.colors[event.sheetOrder % defaultConfig.colors.length];
   var styleProperties = _defineProperty({}, '--timeline-color', color);
 
-  var icon = config[event.sheetId] && config[event.sheetId].icon ? config[event.sheetId].icon : defaultConfig.icons[event.sheetOrder % defaultConfig.icons.length];
   var linkText = Boolean(event['Link text']) ? event['Link text'] : "More information";
 
   return _react2.default.createElement(
@@ -95,7 +96,7 @@ var Event = function Event(_ref2) {
     ),
     _react2.default.createElement(
       "div",
-      { className: "card " + highlight },
+      { className: "tl-item " + highlight },
       _react2.default.createElement(
         "div",
         { className: "dates" },
@@ -284,8 +285,9 @@ var Timeline = function (_React$Component) {
 
       if (allEvents.length > 0 && this.props.interval) {
         (function () {
+          var interval = parseInt(_this5.props.interval);
           var endYear = allEvents[allEvents.length - 1]["Year"];
-          var year = _this5.props.startYear;
+          var year = parseInt(_this5.props.startYear);
           while (year < endYear) {
             var eventThisYear = allEvents.find(function (e) {
               return e["Year"] === year;
@@ -293,7 +295,7 @@ var Timeline = function (_React$Component) {
             if (!eventThisYear) {
               allEvents = allEvents.concat({ type: "counter", Year: year });
             }
-            year = year + _this5.props.interval;
+            year = year + interval;
           }
         })();
       }
@@ -317,7 +319,6 @@ var Timeline = function (_React$Component) {
           eventList = _state.eventList,
           ready = _state.ready;
 
-      console.log(eventList);
 
       if (!ready) {
         return _react2.default.createElement("div", null);
@@ -335,8 +336,8 @@ var Timeline = function (_React$Component) {
             "Legend"
           ),
           (0, _lodash.map)(this.state.timelines, function (timeline, sheetId) {
-            var color = _this6.props.config[sheetId] && _this6.props.config[sheetId].color ? _this6.props.config[sheetId].color : defaultConfig.colors[timeline.sheetOrder % defaultConfig.colors.length];
-            var icon = _this6.props.config[sheetId] && _this6.props.config[sheetId].icon ? _this6.props.config[sheetId].icon : defaultConfig.icons[timeline.sheetOrder % defaultConfig.icons.length];
+            var color = _this6.config[sheetId] && _this6.config[sheetId].color ? _this6.config[sheetId].color : _this6.config.defaults.colors[timeline.sheetOrder % _this6.config.defaults.colors.length];
+            var icon = _this6.config[sheetId] && _this6.config[sheetId].icon ? _this6.config[sheetId].icon : _this6.config.defaults.icons[timeline.sheetOrder % _this6.config.defaults.icons.length];
             var styleProperties = _defineProperty({}, '--timeline-color', color);
 
             return _react2.default.createElement(
@@ -366,7 +367,7 @@ var Timeline = function (_React$Component) {
         ),
         _react2.default.createElement(
           "div",
-          { className: "timeline " + (this.props.alignRight ? "align-right" : "") },
+          { className: "timeline " + (this.props.alignment === "right" ? "align-right" : "") },
           _react2.default.createElement(
             "h3",
             null,
@@ -379,7 +380,11 @@ var Timeline = function (_React$Component) {
               if (event.type === "counter") {
                 return _react2.default.createElement(Counter, { event: event, index: index });
               }
-              return _react2.default.createElement(Event, { event: event, index: index, config: _this6.props.config });
+
+              var color = _this6.config[event.sheetId] && _this6.config[event.sheetId].color ? _this6.config[event.sheetId].color : _this6.config.defaults.colors[event.sheetOrder % _this6.config.defaults.colors.length];
+              var icon = _this6.config[event.sheetId] && _this6.config[event.sheetId].icon ? _this6.config[event.sheetId].icon : _this6.config.defaults.icons[event.sheetOrder % _this6.config.defaults.icons.length];
+
+              return _react2.default.createElement(Event, { event: event, index: index, color: color, icon: icon });
             })
           )
         )
@@ -396,14 +401,18 @@ Timeline.propTypes = {
   spreadsheetId: _propTypes2.default.string.isRequired,
   sheets: _propTypes2.default.array.isRequired,
   apiKey: _propTypes2.default.string.isRequired,
-  config: _propTypes2.default.object
+  config: _propTypes2.default.object,
+  alignment: _propTypes2.default.string,
+  interval: _propTypes2.default.number,
+  startYear: _propTypes2.default.number
 };
 
 Timeline.defaultProps = {
   spreadsheetId: '1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ',
   sheets: ["Toy Story Movies"],
   apiKey: "",
-  config: {}
+  config: {},
+  alignment: "left"
 };
 
 exports.default = Timeline;

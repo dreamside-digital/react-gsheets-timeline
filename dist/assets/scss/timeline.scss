@@ -14,9 +14,9 @@
     p {
 
       .bullet-icon {
-        height: 24px;
-        width: 24px;
-        font-size: 20px;
+        height: 26px;
+        width: 26px;
+        font-size: 24px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -57,11 +57,11 @@
       transition: all 0.3s ease-in-out;
 
       .bullet-icon {
-        margin-left: -13px;
+        margin-left: -15px;
         margin-right: 20px;
-        height: 24px;
-        width: 24px;
-        font-size: 20px;
+        height: 26px;
+        width: 26px;
+        font-size: 24px;
         display: flex;
         flex-shrink: 0;
         justify-content: center;
@@ -91,17 +91,17 @@
         &:hover, &:focus {
           transform: translateY(-5px);
 
-          .card {
-            box-shadow: 0px 5px 10px lightslategray;
+          .tl-item {
+            box-shadow: 0px 5px 10px #cecece;
           }
 
           .bullet-icon i {
-            text-shadow: 0px 5px 10px lightslategray;
+            text-shadow: 0px 5px 10px #cecece;
           }
         }
       }
 
-      .card {
+      .tl-item {
         line-height: 1;
         display: flex;
         background: white;
@@ -129,6 +129,14 @@
         &.highlight {
           background: var(--timeline-color);
           color: white;
+
+          .info {
+            .headline {
+              h4 {
+                color: white;
+              }
+            }
+          }
 
           .info .description {
             a {
@@ -174,7 +182,11 @@
         .info {
           .headline {
             h4 {
-              margin-bottom: 0.75em;
+              font-family: sans-serif;
+              font-size: 1rem;
+              font-weight: bold;
+              color: black;
+              margin-bottom: 0.75rem;
             }
           }
 
@@ -214,7 +226,7 @@
         justify-content: flex-end;
 
         .bullet-icon {
-          margin-right: -13px;
+          margin-right: -15px;
           margin-left: 20px;
           order: 2;
         }
@@ -224,7 +236,7 @@
           order: 2;
         }
 
-        .card {
+        .tl-item {
           order: 1;
 
           &:before {
