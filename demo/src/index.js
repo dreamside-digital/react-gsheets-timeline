@@ -90,7 +90,7 @@ render() {
       apiKey={"YOUR_API_KEY"}
       interval={1}
       startYear={1993}
-      alignRight={true}
+      alignment={"right"}
       config={config}
     />
   )
@@ -106,7 +106,7 @@ render() {
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
             interval={"1"}
             startYear={"1993"}
-            alignRight={true}
+            alignment={"right"}
             config={config}
           />
         </div>
