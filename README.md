@@ -1,8 +1,24 @@
 # React Google Sheets Timeline
 
-**Simple timeline pulling data from a Google Sheet**
+**Simple configurable timeline that displays data from a Google Sheet**
 
 Demo: [https://nomadic-labs.github.io/react-gsheets-timeline/](https://nomadic-labs.github.io/react-gsheets-timeline/)
+
+**Features:**
+- Fetches data from a Google spreadsheet and generates a simple timeline that displays a timeline item for each row in the sheet
+- Timeline events can include year, month, day, title, description, link, and thumbnail image
+- Display multiple categories on the timeline, each sheet from the workbook is a separate category
+- The colors and icons representing the categories are configurable
+- Toggle the visibility of each category on the timeline
+- Option to add time interval markers markers to show the spacing of the events in the timeline
+- Timeline can be aligned to left, right, or center 
+- Center alignment displays the y-axis in the center of the timeline, and alternates timeline categories on either side of the timeline
+- Categories can be configured individually to be on the left or right of the y-axis when the timeline is center-aligned
+- No inline styles - easy to override CSS to customize the appearance of the timeline
+
+**Known issues:**
+- Currently optimized for multi-year timelines. Events show up in chronological order down to the day, but time markers have a minimum interval of one year.
+- Mobile formatting is limited. Images are hidden on mobile (at <768px) and center-aligned timeline goes back to left-aligned (at <992px).
 
 # How to Use
 
@@ -26,9 +42,9 @@ Update the sharing settings to that anyone can find and view the spreadsheet
 ### Step 4: Install and import the React component in your project
 
 Install the package:
-`yarn add react-gsheets-timeline`
+```yarn add react-gsheets-timeline```
 or
-`npm install react-gsheets-timeline`
+```npm install react-gsheets-timeline```
 
 Import into your app:
 
