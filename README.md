@@ -1,8 +1,24 @@
 # React Google Sheets Timeline
 
-**Simple timeline pulling data from a Google Sheet**
+**Simple configurable timeline that displays data from a Google Sheet**
 
-Demo:
+Demo: [https://nomadic-labs.github.io/react-gsheets-timeline/](https://nomadic-labs.github.io/react-gsheets-timeline/)
+
+**Features:**
+- Fetches data from a Google spreadsheet and generates a simple timeline that displays a timeline item for each row in the sheet
+- Timeline events can include year, month, day, title, description, link, and thumbnail image
+- Display multiple categories on the timeline, each sheet from the workbook is a separate category
+- The colors and icons representing the categories are configurable
+- Toggle the visibility of each category on the timeline
+- Option to add time interval markers markers to show the spacing of the events in the timeline
+- Timeline can be aligned to left, right, or center 
+- Center alignment displays the y-axis in the center of the timeline, and alternates timeline categories on either side of the timeline
+- Categories can be configured individually to be on the left or right of the y-axis when the timeline is center-aligned
+- No inline styles - easy to override CSS to customize the appearance of the timeline
+
+**Known issues:**
+- Currently optimized for multi-year timelines. Events show up in chronological order down to the day, but time markers have a minimum interval of one year.
+- Mobile formatting is limited. Images are hidden on mobile (at <768px) and center-aligned timeline goes back to left-aligned (at <992px).
 
 # How to Use
 
@@ -26,9 +42,9 @@ Update the sharing settings to that anyone can find and view the spreadsheet
 ### Step 4: Install and import the React component in your project
 
 Install the package:
-`yarn add react-gsheets-timeline`
+```yarn add react-gsheets-timeline```
 or
-`npm install react-gsheets-timeline`
+```npm install react-gsheets-timeline```
 
 Import into your app:
 
@@ -74,13 +90,13 @@ const App = props => (
 
 | Prop | Type | Description
 | ---- | ---- | -----------
-| `spreadsheetId` (required) | String | The ID of the google spreadsheet, found in the URL after `https://docs.google.com/spreadsheets/d/` and before the next `/` |
-| `sheets`  (required) | Array of Strings | An array of the sheet titles. The sheet title is on the tab at the bottom of the sheet. Each sheet will be a different category in the timeline. |
-| `apiKey`  (required) | String | The API key for your google project |
-| `config`  (optional) | Object | Configuration object for timeline icons and colors |
-| `alignment`  (optional) | String | Must be one of "left", "right", or "center". Default is "left". |
-| `interval`  (optional) | Number | Use to display interval markers at the configured year interval. |
-| `startYear`  (optional) | Number | This prop can only used when the `interval` prop is set, to specify a start year different than the year of the first event. |
+| `spreadsheetId` | String (required) | The ID of the google spreadsheet, found in the URL after `https://docs.google.com/spreadsheets/d/` and before the next `/` |
+| `sheets` | Array of Strings (required) | An array of the sheet titles. The sheet title is on the tab at the bottom of the sheet. Each sheet will be a different category in the timeline. |
+| `apiKey` | String (required) | The API key for your google project |
+| `config` | Object (optional) | Configuration object for timeline icons and colors |
+| `alignment` | String (optional) | Must be one of "left", "right", or "center". Default is "left". |
+| `interval` | Number (optional) | Use to display interval markers at the configured year interval. |
+| `startYear` | Number (optional) | This prop can only used when the `interval` prop is set, to specify a start year different than the year of the first event. |
 
 
 ## Configuration
@@ -89,7 +105,7 @@ The config prop accepts an object in which you can configure the icon and color 
 
 ```
 {
-  ["First sheet title"]: {
+  "Sheet1": {
     color: String (any valid CSS value),
     icon: Node (React component or JSX),
     alignment: String ("left" or "right", only used when the overall timeline alignment is "center" to determine which side of the y-axis the evetns for this sheet will apppear on.)
