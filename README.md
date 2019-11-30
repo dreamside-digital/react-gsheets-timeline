@@ -34,24 +34,26 @@ Import into your app:
 
 ```
 import React from 'react';
-import { render } from 'react-dom';
 
 import Timeline from 'react-gsheets-timeline';
 
 
 const config = {
-  "Colonial Timeline": {
-    icon: <i className="fas fa-paw"></i>,
-    color: "#2f6165",
+  "Toy Story Movies": {
+    icon: <i className="fas fa-hat-cowboy-side"></i>,
+    color: "#129bd3",
+    alignment: "left",
   },
-  "Company Timeline": {
-    icon: <i className="fas fa-feather"></i>,
-    color: "#b46547"
+  "Jurassic Park Movies": {
+    icon: <i className="fas fa-dragon"></i>,
+    color: "#42620C",
+    alignment: "left",
   },
-  "Land Cessation Treaties": {
-    icon: <i className="fas fa-fish"></i>,
-    color: "#423243"
-  }
+  "Spiderman Movies": {
+    icon: <i className="fas fa-spider"></i>,
+    color: "#AF0000",
+    alignment: "right",
+  },
 }
 
 
@@ -59,8 +61,8 @@ const App = props => (
   <div className="wrapper">
     <h1>Timeline Demo</h1>
     <Timeline
-      spreadsheetId={"1PtqsSJq3wl09Q_IW-pgxSiXSLMYxDcrOeda7AMCM5Js"}
-      sheets={["Colonial Timeline", "Company Timeline", "Land Cessation Treaties"]}
+      spreadsheetId={"1vieT0gVrDOHAvAUW8uUWQZj2heeJr8Xg6bZbvKkFFbQ"}
+      sheets={["Toy Story Movies", "Jurassic Park Movies", "Spiderman Movies"]}
       apiKey={"YOUR API KEY"}
       config={config}
     />
@@ -76,6 +78,9 @@ const App = props => (
 | `sheets`  (required) | Array of Strings | An array of the sheet titles. The sheet title is on the tab at the bottom of the sheet. Each sheet will be a different category in the timeline. |
 | `apiKey`  (required) | String | The API key for your google project |
 | `config`  (optional) | Object | Configuration object for timeline icons and colors |
+| `alignment`  (optional) | String | Must be one of "left", "right", or "center". Default is "left". |
+| `interval`  (optional) | Number | Use to display interval markers at the configured year interval. |
+| `startYear`  (optional) | Number | This prop can only used when the `interval` prop is set, to specify a start year different than the year of the first event. |
 
 
 ## Configuration
@@ -86,7 +91,8 @@ The config prop accepts an object in which you can configure the icon and color 
 {
   ["First sheet title"]: {
     color: String (any valid CSS value),
-    icon: Node (React component or JSX)
+    icon: Node (React component or JSX),
+    alignment: String ("left" or "right", only used when the overall timeline alignment is "center" to determine which side of the y-axis the evetns for this sheet will apppear on.)
   }
 }
 ```

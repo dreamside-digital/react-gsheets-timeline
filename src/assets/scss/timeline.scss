@@ -1,5 +1,4 @@
 
-
 .nl-timeline {
   font-family: sans-serif;
 
@@ -233,18 +232,11 @@
 
     &.align-right {
       ul {
-        padding: 0;
-        position: relative;
         margin-left: 0;
         margin-right: 9px;
 
         .axis {
-          position: absolute;
-          height: 100%;
-          width: 2px;
-          background: slategray;
           left: 100%;
-          z-index: -1;
         }
       }
 
@@ -268,28 +260,10 @@
               }
 
               .dates {
-                font-family: sans-serif;
                 order: 2;
                 margin-left: 20px;
                 margin-right: 0;
                 text-align: right;
-
-                .year {
-                  font-weight: bold;
-                  font-size: 1.5em;
-                  width: 4ch;
-                  margin-bottom: 0.25rem;
-                }
-
-                .month {
-                  font-size: 0.9em;
-                }
-
-                .hyphen {
-                  margin-bottom: 0.25rem;
-                  margin-top: 0.25rem;
-                  line-height: 1;
-                }
               }
 
               .image {
@@ -300,27 +274,6 @@
 
               .info {
                 order: 1;
-
-                .description {
-                  font-size: 0.9em;
-                  line-height: 1.2;
-                  margin-bottom: 0.75em;
-
-                  i {
-                    margin-right: 0.4em;
-                  }
-
-                  a {
-                    font-size: inherit;
-                    color: inherit;
-                    font-style: italic;
-                    text-decoration: none;
-
-                    &:hover, &:focus {
-                      text-decoration: underline;
-                    }
-                  }
-                }
               }
             }
 

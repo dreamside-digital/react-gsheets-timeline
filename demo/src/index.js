@@ -14,12 +14,12 @@ const config = {
   },
   "Jurassic Park Movies": {
     icon: <i className="fas fa-dragon"></i>,
-    color: "darkgreen",
+    color: "#42620C",
     alignment: "left",
   },
   "Spiderman Movies": {
     icon: <i className="fas fa-spider"></i>,
-    color: "darkred",
+    color: "#AF0000",
     alignment: "right",
   },
 }
@@ -75,15 +75,18 @@ render() {
     "Toy Story Movies": {
       icon: <i className="fas fa-hat-cowboy-side"></i>,
       color: "#129bd3",
+      alignment: "left",
     },
     "Jurassic Park Movies": {
       icon: <i className="fas fa-dragon"></i>,
-      color: "darkgreen"
+      color: "#42620C",
+      alignment: "left",
     },
     "Spiderman Movies": {
       icon: <i className="fas fa-spider"></i>,
-      color: "darkred"
-    }
+      color: "#AF0000",
+      alignment: "right",
+    },
   }
 
   return(
@@ -93,7 +96,7 @@ render() {
       apiKey={"YOUR_API_KEY"}
       interval={1}
       startYear={1993}
-      alignment={"right"}
+      alignment={"center"}
       config={config}
     />
   )
