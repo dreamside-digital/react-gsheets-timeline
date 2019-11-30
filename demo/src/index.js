@@ -1,5 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHatCowboySide, faDragon, faSpider } from '@fortawesome/free-solid-svg-icons'
 
 import Timeline from '../../src/components/Timeline';
 
@@ -8,17 +10,17 @@ import "./index.scss"
 
 const config = {
   "Toy Story Movies": {
-    icon: <i className="fas fa-hat-cowboy-side"></i>,
+    icon: <FontAwesomeIcon icon={faHatCowboySide} />,
     color: "#129bd3",
     alignment: "left",
   },
   "Jurassic Park Movies": {
-    icon: <i className="fas fa-dragon"></i>,
+    icon: <FontAwesomeIcon icon={faDragon} />,
     color: "#42620C",
     alignment: "left",
   },
   "Spiderman Movies": {
-    icon: <i className="fas fa-spider"></i>,
+    icon: <FontAwesomeIcon icon={faSpider} />,
     color: "#AF0000",
     alignment: "right",
   },

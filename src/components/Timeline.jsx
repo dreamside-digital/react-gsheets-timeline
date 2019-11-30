@@ -1,14 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import axios from 'axios'
-import { map } from 'lodash';
+import React from "react"
+import PropTypes from "prop-types"
+import map from 'lodash/map'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle'
+import { faSquare } from '@fortawesome/free-solid-svg-icons/faSquare'
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar'
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus'
 
-import "@fortawesome/fontawesome-free/css/all.css"
-import "../assets/scss/timeline.scss"
+import "../scss/timeline.scss"
 
 const defaultConfig = {
   defaults: {
-    icons: [<i className="fas fa-circle" />, <i className="fas fa-square" />, <i className="fas fa-star" />],
+    icons: [<FontAwesomeIcon icon={faCircle} />, <FontAwesomeIcon icon={faSquare} />, <FontAwesomeIcon icon={faStar} />],
     colors: ["darkcyan", "darkslateblue", "firebrick", "steelblue", "chocolate"]
   }
 }
@@ -16,7 +19,7 @@ const defaultConfig = {
 const Counter = ({ event, index }) => {
   return(
     <li key={`event-${index}`} className="interval-marker">
-      <div className="counter-icon"><i className="fas fa-minus" /></div>
+      <div className="counter-icon"><FontAwesomeIcon icon={faMinus} /></div>
     </li>
   )
 }
@@ -25,8 +28,6 @@ const Event = ({ event, index, color, icon, alignmentClass }) => {
   if (!event['Year']) {
     return null
   }
-
-  console.log('event', event)
 
   const year = event['Year']
   const month = Boolean(event['Month']) ? parseInt(event['Month']) - 1 : null
@@ -45,8 +46,8 @@ const Event = ({ event, index, color, icon, alignmentClass }) => {
   const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
   return(
-    <li key={`event-${index}`} className={`event ${alignmentClass}`} style={ styleProperties } tabIndex={0}>
-      <div className="event-container">
+    <li key={`event-${index}`} className={`event ${alignmentClass}`} style={ styleProperties }>
+      <div className="event-container" tabIndex={0}>
         <div className="bullet-icon">{icon}</div>
         <div className={`tl-item ${highlight}`}>
           <div className="dates">
@@ -138,30 +139,32 @@ class Timeline extends React.Component {
     this.props.sheets.forEach((sheetId, index) => {
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetId}?key=${apiKey}`
 
-      axios.get(url)
+      fetch(url)
       .then(res => {
-        console.log(res)
-        const headings = res.data.values[0]
-        let rows = [...res.data.values]
-        rows.shift()
-        const events = rows.map(row => {
-          let item = { sheetId: sheetId, sheetOrder: index, type: "event" }
-          headings.map((heading, index) => {
-            if (heading === "Year") {
-              item[heading] = parseInt(row[index])
-            } else {
-              item[heading] = row[index]
-            }
+        res.json().then(data => {
+          console.log(data)
+          const headings = data.values[0]
+          let rows = [...data.values]
+          rows.shift()
+          const events = rows.map(row => {
+            let item = { sheetId: sheetId, sheetOrder: index, type: "event" }
+            headings.map((heading, index) => {
+              if (heading === "Year") {
+                item[heading] = parseInt(row[index])
+              } else {
+                item[heading] = row[index]
+              }
+            })
+            return item
           })
-          return item
-        })
 
-        this.setState({
-          timelines: {
-            ...this.state.timelines,
-            [sheetId]: { ...this.state.timelines[sheetId], show: true, events: events, sheetOrder: index }
-          },
-          ready: true
+          this.setState({
+            timelines: {
+              ...this.state.timelines,
+              [sheetId]: { ...this.state.timelines[sheetId], show: true, events: events, sheetOrder: index }
+            },
+            ready: true
+          })
         })
       })
       .catch(err => {

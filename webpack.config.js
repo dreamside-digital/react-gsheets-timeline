@@ -1,14 +1,12 @@
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const htmlWebpackPlugin = new HtmlWebpackPlugin({
-    template: path.join(__dirname, "demo/src/index.html"),
-    filename: "./index.html"
-});
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 module.exports = {
-    entry: path.join(__dirname, "demo/src/index.js"),
+    entry: path.join(__dirname, "src/index.js"),
     output: {
-        path: path.join(__dirname, "demo/dist"),
-        filename: "bundle.js"
+        path: path.join(__dirname, "dist"),
+        filename: "index.js"
     },
     module: {
         rules: [
@@ -19,42 +17,30 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                use: ["style-loader", MiniCssExtractPlugin.loader, "css-loader"]
             },
             {
                 test: /\.s[ac]ss$/i,
                 use: [
-                  // Creates `style` nodes from JS strings
                   'style-loader',
-                  // Translates CSS into CommonJS
+                  MiniCssExtractPlugin.loader,
                   'css-loader',
-                  // Compiles Sass to CSS
                   'sass-loader',
                 ],
-            },
-            {
-                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                use: [
-                  {
-                    loader: 'file-loader',
-                    options: {
-                      name: '[name].[ext]',
-                      outputPath: 'fonts/'
-                    }
-                  }
-                ]
-              }
+            }
         ]
     },
-    plugins: [htmlWebpackPlugin],
+    plugins: [
+      new MiniCssExtractPlugin({
+        filename: 'timeline.css',
+      }),
+      new BundleAnalyzerPlugin()
+    ],
     resolve: {
         extensions: [".js", ".jsx"],
         alias: {
             'react': path.resolve(__dirname, './node_modules/react'),
             'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
         }
-    },
-    devServer: {
-        port: 3001
     }
 };
