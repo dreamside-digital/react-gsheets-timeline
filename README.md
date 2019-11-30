@@ -74,13 +74,13 @@ const App = props => (
 
 | Prop | Type | Description
 | ---- | ---- | -----------
-| `spreadsheetId` (required) | String | The ID of the google spreadsheet, found in the URL after `https://docs.google.com/spreadsheets/d/` and before the next `/` |
-| `sheets`  (required) | Array of Strings | An array of the sheet titles. The sheet title is on the tab at the bottom of the sheet. Each sheet will be a different category in the timeline. |
-| `apiKey`  (required) | String | The API key for your google project |
-| `config`  (optional) | Object | Configuration object for timeline icons and colors |
-| `alignment`  (optional) | String | Must be one of "left", "right", or "center". Default is "left". |
-| `interval`  (optional) | Number | Use to display interval markers at the configured year interval. |
-| `startYear`  (optional) | Number | This prop can only used when the `interval` prop is set, to specify a start year different than the year of the first event. |
+| `spreadsheetId` | String (required) | The ID of the google spreadsheet, found in the URL after `https://docs.google.com/spreadsheets/d/` and before the next `/` |
+| `sheets` | Array of Strings (required) | An array of the sheet titles. The sheet title is on the tab at the bottom of the sheet. Each sheet will be a different category in the timeline. |
+| `apiKey` | String (required) | The API key for your google project |
+| `config` | Object (optional) | Configuration object for timeline icons and colors |
+| `alignment` | String (optional) | Must be one of "left", "right", or "center". Default is "left". |
+| `interval` | Number (optional) | Use to display interval markers at the configured year interval. |
+| `startYear` | Number (optional) | This prop can only used when the `interval` prop is set, to specify a start year different than the year of the first event. |
 
 
 ## Configuration
