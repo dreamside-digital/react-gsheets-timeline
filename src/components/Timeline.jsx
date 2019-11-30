@@ -259,7 +259,7 @@ class Timeline extends React.Component {
 
               const color = this.config[event.sheetId] && this.config[event.sheetId].color ? this.config[event.sheetId].color : this.config.defaults.colors[event.sheetOrder % this.config.defaults.colors.length]
               const icon = this.config[event.sheetId] && this.config[event.sheetId].icon ? this.config[event.sheetId].icon : this.config.defaults.icons[event.sheetOrder % this.config.defaults.icons.length]
-              let alignmentClass = (this.props.alignment === "center" && event.sheetOrder % 2 === 0) ? "right" : "left"
+              let alignmentClass = (this.props.alignment === "center" && event.sheetOrder % 2 === 0) ? "left" : "right"
 
               if (this.config[event.sheetId] && this.config[event.sheetId].alignment) {
                 alignmentClass = this.config[event.sheetId].alignment

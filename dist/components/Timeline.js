@@ -403,7 +403,7 @@ var Timeline = function (_React$Component) {
 
               var color = _this6.config[event.sheetId] && _this6.config[event.sheetId].color ? _this6.config[event.sheetId].color : _this6.config.defaults.colors[event.sheetOrder % _this6.config.defaults.colors.length];
               var icon = _this6.config[event.sheetId] && _this6.config[event.sheetId].icon ? _this6.config[event.sheetId].icon : _this6.config.defaults.icons[event.sheetOrder % _this6.config.defaults.icons.length];
-              var alignmentClass = _this6.props.alignment === "center" && event.sheetOrder % 2 === 0 ? "right" : "left";
+              var alignmentClass = _this6.props.alignment === "center" && event.sheetOrder % 2 === 0 ? "left" : "right";
 
               if (_this6.config[event.sheetId] && _this6.config[event.sheetId].alignment) {
                 alignmentClass = _this6.config[event.sheetId].alignment;
