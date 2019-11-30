@@ -2,7 +2,7 @@
 
 **Simple timeline pulling data from a Google Sheet**
 
-Demo:
+Demo: [https://nomadic-labs.github.io/react-gsheets-timeline/](https://nomadic-labs.github.io/react-gsheets-timeline/)
 
 # How to Use
 
