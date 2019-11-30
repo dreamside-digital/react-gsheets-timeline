@@ -21,10 +21,12 @@ const Counter = ({ event, index }) => {
   )
 }
 
-const Event = ({ event, index, color, icon }) => {
+const Event = ({ event, index, color, icon, alignmentClass }) => {
   if (!event['Year']) {
     return null
   }
+
+  console.log('event', event)
 
   const year = event['Year']
   const month = Boolean(event['Month']) ? parseInt(event['Month']) - 1 : null
@@ -43,49 +45,51 @@ const Event = ({ event, index, color, icon }) => {
   const linkText = Boolean(event['Link text']) ? event['Link text'] : "More information"
 
   return(
-    <li key={`event-${index}`} className="event" tabIndex={0} style={ styleProperties }>
-      <div className="bullet-icon">{icon}</div>
-      <div className={`tl-item ${highlight}`}>
-        <div className="dates">
-          <div className="year">{startDate.getFullYear()}</div>
-          <div className="month">
-            <span>{(Boolean(event['Month']) && Boolean(event["Day"])) && `${startDate.toLocaleDateString('default', {month: 'short', day: 'numeric'})}` || Boolean(event['Month']) && `${startDate.toLocaleDateString('default', {month: 'short'})}` || null}</span>
-          </div>
-          {
-            endDate &&
-            <div>
-              <div className="hyphen"><i className="fas fa-minus" /></div>
-              <div className="year">{endDate.getFullYear()}</div>
-              <div className="month">
-                <span>{(Boolean(event['End Month']) && Boolean(event["End Day"])) && `${endDate.toLocaleDateString('default', {month: 'short', day: 'numeric'})}` || Boolean(event['End Month']) && `${endDate.toLocaleDateString('default', {month: 'short'})}` || null}</span>
+    <li key={`event-${index}`} className={`event ${alignmentClass}`} style={ styleProperties } tabIndex={0}>
+      <div className="event-container">
+        <div className="bullet-icon">{icon}</div>
+        <div className={`tl-item ${highlight}`}>
+          <div className="dates">
+            <div className="year">{startDate.getFullYear()}</div>
+            <div className="month">
+              <span>{(Boolean(event['Month']) && Boolean(event["Day"])) && `${startDate.toLocaleDateString('default', {month: 'short', day: 'numeric'})}` || Boolean(event['Month']) && `${startDate.toLocaleDateString('default', {month: 'short'})}` || null}</span>
+            </div>
+            {
+              endDate &&
+              <div>
+                <div className="hyphen"><i className="fas fa-minus" /></div>
+                <div className="year">{endDate.getFullYear()}</div>
+                <div className="month">
+                  <span>{(Boolean(event['End Month']) && Boolean(event["End Day"])) && `${endDate.toLocaleDateString('default', {month: 'short', day: 'numeric'})}` || Boolean(event['End Month']) && `${endDate.toLocaleDateString('default', {month: 'short'})}` || null}</span>
+                </div>
               </div>
-            </div>
-          }
-        </div>
-
-
-        <div className="info">
-          <div className="headline">
-            <h4>{event['Headline']}</h4>
+            }
           </div>
-          <div className="description">
-            {event['Text']}
+
+
+          <div className="info">
+            <div className="headline">
+              <h4>{event['Headline']}</h4>
+            </div>
+            <div className="description">
+              {event['Text']}
+            </div>
+
+            {
+              event["Link"] &&
+              <div className="description">
+                <a href={event["Link"]} target="_blank" rel="noopener"><i className="fas fa-external-link-alt"></i><span className="link-text">{linkText}<span className="underline" /></span></a>
+              </div>
+            }
           </div>
 
           {
-            event["Link"] &&
-            <div className="description">
-              <a href={event["Link"]} target="_blank" rel="noopener"><i className="fas fa-external-link-alt"></i><span className="link-text">{linkText}<span className="underline" /></span></a>
+            event["Image URL"] &&
+            <div className="image-container hide-on-mobile">
+              <img src={event["Image URL"]} alt={event["Image description"]} className="image" />
             </div>
           }
         </div>
-
-        {
-          event["Image URL"] &&
-          <div className="image-container hide-on-mobile">
-            <img src={event["Image URL"]} alt={event["Image description"]} className="image" />
-          </div>
-        }
       </div>
     </li>
   )
@@ -191,7 +195,21 @@ class Timeline extends React.Component {
   }
 
   orderEvents(events) {
-    const eventList = events.sort((a,b) => (a["Year"] - b["Year"]))
+    const eventList = events.sort((a,b) => {
+      const yearA = a['Year']
+      const monthA = Boolean(a['Month']) ? parseInt(a['Month']) - 1 : null
+      const dayA = Boolean(a['Day']) ? parseInt(a['Day']) : null
+
+      const yearB = b['Year']
+      const monthB = Boolean(b['Month']) ? parseInt(b['Month']) - 1 : null
+      const dayB = Boolean(b['Day']) ? parseInt(b['Day']) : null
+
+      const dateA = new Date(yearA, monthA, dayA)
+      const dateB = new Date(yearB, monthB, dayB)
+
+      return dateA - dateB
+    })
+
     this.setState({ eventList })
   }
 
@@ -230,9 +248,10 @@ class Timeline extends React.Component {
             }
           </div>
 
-          <div className={`timeline ${this.props.alignment === "right" ? "align-right" : ""}`}>
+          <div className={`timeline align-${this.props.alignment}`}>
             <h3>Events</h3>
             <ul>
+              <div className="axis" />
             {eventList.map((event, index) => {
               if (event.type === "counter") {
                 return <Counter event={event} index={index} key={`event-${index}`} />
@@ -240,8 +259,13 @@ class Timeline extends React.Component {
 
               const color = this.config[event.sheetId] && this.config[event.sheetId].color ? this.config[event.sheetId].color : this.config.defaults.colors[event.sheetOrder % this.config.defaults.colors.length]
               const icon = this.config[event.sheetId] && this.config[event.sheetId].icon ? this.config[event.sheetId].icon : this.config.defaults.icons[event.sheetOrder % this.config.defaults.icons.length]
+              let alignmentClass = (this.props.alignment === "center" && event.sheetOrder % 2 === 0) ? "right" : "left"
 
-              return <Event key={`event-${index}`} event={event} index={index} color={color} icon={icon} />
+              if (this.config[event.sheetId] && this.config[event.sheetId].alignment) {
+                alignmentClass = this.config[event.sheetId].alignment
+              }
+
+              return <Event key={`event-${index}`} event={event} index={index} color={color} icon={icon} alignmentClass={alignmentClass} />
             })}
             </ul>
           </div>

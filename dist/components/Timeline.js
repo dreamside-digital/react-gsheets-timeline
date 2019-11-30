@@ -64,11 +64,14 @@ var Event = function Event(_ref2) {
   var event = _ref2.event,
       index = _ref2.index,
       color = _ref2.color,
-      icon = _ref2.icon;
+      icon = _ref2.icon,
+      alignmentClass = _ref2.alignmentClass;
 
   if (!event['Year']) {
     return null;
   }
+
+  console.log('event', event);
 
   var year = event['Year'];
   var month = Boolean(event['Month']) ? parseInt(event['Month']) - 1 : null;
@@ -88,44 +91,25 @@ var Event = function Event(_ref2) {
 
   return _react2.default.createElement(
     "li",
-    { key: "event-" + index, className: "event", tabIndex: 0, style: styleProperties },
+    { key: "event-" + index, className: "event " + alignmentClass, style: styleProperties, tabIndex: 0 },
     _react2.default.createElement(
       "div",
-      { className: "bullet-icon" },
-      icon
-    ),
-    _react2.default.createElement(
-      "div",
-      { className: "tl-item " + highlight },
+      { className: "event-container" },
       _react2.default.createElement(
         "div",
-        { className: "dates" },
+        { className: "bullet-icon" },
+        icon
+      ),
+      _react2.default.createElement(
+        "div",
+        { className: "tl-item " + highlight },
         _react2.default.createElement(
           "div",
-          { className: "year" },
-          startDate.getFullYear()
-        ),
-        _react2.default.createElement(
-          "div",
-          { className: "month" },
-          _react2.default.createElement(
-            "span",
-            null,
-            Boolean(event['Month']) && Boolean(event["Day"]) && "" + startDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['Month']) && "" + startDate.toLocaleDateString('default', { month: 'short' }) || null
-          )
-        ),
-        endDate && _react2.default.createElement(
-          "div",
-          null,
-          _react2.default.createElement(
-            "div",
-            { className: "hyphen" },
-            _react2.default.createElement("i", { className: "fas fa-minus" })
-          ),
+          { className: "dates" },
           _react2.default.createElement(
             "div",
             { className: "year" },
-            endDate.getFullYear()
+            startDate.getFullYear()
           ),
           _react2.default.createElement(
             "div",
@@ -133,48 +117,71 @@ var Event = function Event(_ref2) {
             _react2.default.createElement(
               "span",
               null,
-              Boolean(event['End Month']) && Boolean(event["End Day"]) && "" + endDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['End Month']) && "" + endDate.toLocaleDateString('default', { month: 'short' }) || null
+              Boolean(event['Month']) && Boolean(event["Day"]) && "" + startDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['Month']) && "" + startDate.toLocaleDateString('default', { month: 'short' }) || null
             )
-          )
-        )
-      ),
-      _react2.default.createElement(
-        "div",
-        { className: "info" },
-        _react2.default.createElement(
-          "div",
-          { className: "headline" },
-          _react2.default.createElement(
-            "h4",
+          ),
+          endDate && _react2.default.createElement(
+            "div",
             null,
-            event['Headline']
+            _react2.default.createElement(
+              "div",
+              { className: "hyphen" },
+              _react2.default.createElement("i", { className: "fas fa-minus" })
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "year" },
+              endDate.getFullYear()
+            ),
+            _react2.default.createElement(
+              "div",
+              { className: "month" },
+              _react2.default.createElement(
+                "span",
+                null,
+                Boolean(event['End Month']) && Boolean(event["End Day"]) && "" + endDate.toLocaleDateString('default', { month: 'short', day: 'numeric' }) || Boolean(event['End Month']) && "" + endDate.toLocaleDateString('default', { month: 'short' }) || null
+              )
+            )
           )
         ),
         _react2.default.createElement(
           "div",
-          { className: "description" },
-          event['Text']
-        ),
-        event["Link"] && _react2.default.createElement(
-          "div",
-          { className: "description" },
+          { className: "info" },
           _react2.default.createElement(
-            "a",
-            { href: event["Link"], target: "_blank", rel: "noopener" },
-            _react2.default.createElement("i", { className: "fas fa-external-link-alt" }),
+            "div",
+            { className: "headline" },
             _react2.default.createElement(
-              "span",
-              { className: "link-text" },
-              linkText,
-              _react2.default.createElement("span", { className: "underline" })
+              "h4",
+              null,
+              event['Headline']
+            )
+          ),
+          _react2.default.createElement(
+            "div",
+            { className: "description" },
+            event['Text']
+          ),
+          event["Link"] && _react2.default.createElement(
+            "div",
+            { className: "description" },
+            _react2.default.createElement(
+              "a",
+              { href: event["Link"], target: "_blank", rel: "noopener" },
+              _react2.default.createElement("i", { className: "fas fa-external-link-alt" }),
+              _react2.default.createElement(
+                "span",
+                { className: "link-text" },
+                linkText,
+                _react2.default.createElement("span", { className: "underline" })
+              )
             )
           )
+        ),
+        event["Image URL"] && _react2.default.createElement(
+          "div",
+          { className: "image-container hide-on-mobile" },
+          _react2.default.createElement("img", { src: event["Image URL"], alt: event["Image description"], className: "image" })
         )
-      ),
-      event["Image URL"] && _react2.default.createElement(
-        "div",
-        { className: "image-container hide-on-mobile" },
-        _react2.default.createElement("img", { src: event["Image URL"], alt: event["Image description"], className: "image" })
       )
     )
   );
@@ -306,8 +313,20 @@ var Timeline = function (_React$Component) {
     key: "orderEvents",
     value: function orderEvents(events) {
       var eventList = events.sort(function (a, b) {
-        return a["Year"] - b["Year"];
+        var yearA = a['Year'];
+        var monthA = Boolean(a['Month']) ? parseInt(a['Month']) - 1 : null;
+        var dayA = Boolean(a['Day']) ? parseInt(a['Day']) : null;
+
+        var yearB = b['Year'];
+        var monthB = Boolean(b['Month']) ? parseInt(b['Month']) - 1 : null;
+        var dayB = Boolean(b['Day']) ? parseInt(b['Day']) : null;
+
+        var dateA = new Date(yearA, monthA, dayA);
+        var dateB = new Date(yearB, monthB, dayB);
+
+        return dateA - dateB;
       });
+
       this.setState({ eventList: eventList });
     }
   }, {
@@ -367,7 +386,7 @@ var Timeline = function (_React$Component) {
         ),
         _react2.default.createElement(
           "div",
-          { className: "timeline " + (this.props.alignment === "right" ? "align-right" : "") },
+          { className: "timeline align-" + this.props.alignment },
           _react2.default.createElement(
             "h3",
             null,
@@ -376,6 +395,7 @@ var Timeline = function (_React$Component) {
           _react2.default.createElement(
             "ul",
             null,
+            _react2.default.createElement("div", { className: "axis" }),
             eventList.map(function (event, index) {
               if (event.type === "counter") {
                 return _react2.default.createElement(Counter, { event: event, index: index, key: "event-" + index });
@@ -383,8 +403,13 @@ var Timeline = function (_React$Component) {
 
               var color = _this6.config[event.sheetId] && _this6.config[event.sheetId].color ? _this6.config[event.sheetId].color : _this6.config.defaults.colors[event.sheetOrder % _this6.config.defaults.colors.length];
               var icon = _this6.config[event.sheetId] && _this6.config[event.sheetId].icon ? _this6.config[event.sheetId].icon : _this6.config.defaults.icons[event.sheetOrder % _this6.config.defaults.icons.length];
+              var alignmentClass = _this6.props.alignment === "center" && event.sheetOrder % 2 === 0 ? "right" : "left";
 
-              return _react2.default.createElement(Event, { key: "event-" + index, event: event, index: index, color: color, icon: icon });
+              if (_this6.config[event.sheetId] && _this6.config[event.sheetId].alignment) {
+                alignmentClass = _this6.config[event.sheetId].alignment;
+              }
+
+              return _react2.default.createElement(Event, { key: "event-" + index, event: event, index: index, color: color, icon: icon, alignmentClass: alignmentClass });
             })
           )
         )

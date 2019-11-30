@@ -10,14 +10,17 @@ const config = {
   "Toy Story Movies": {
     icon: <i className="fas fa-hat-cowboy-side"></i>,
     color: "#129bd3",
+    alignment: "left",
   },
   "Jurassic Park Movies": {
     icon: <i className="fas fa-dragon"></i>,
-    color: "darkgreen"
+    color: "darkgreen",
+    alignment: "left",
   },
   "Spiderman Movies": {
     icon: <i className="fas fa-spider"></i>,
-    color: "darkred"
+    color: "darkred",
+    alignment: "right",
   },
 }
 
@@ -106,7 +109,7 @@ render() {
             apiKey={"AIzaSyBT0ozOMS-9tV6HqqMUHsUxqovZ-Jp7UZ8"}
             interval={"1"}
             startYear={"1993"}
-            alignment={"right"}
+            alignment={"center"}
             config={config}
           />
         </div>
