@@ -89,7 +89,7 @@ The config prop accepts an object in which you can configure the icon and color 
 
 ```
 {
-  ["First sheet title"]: {
+  "Sheet1": {
     color: String (any valid CSS value),
     icon: Node (React component or JSX),
     alignment: String ("left" or "right", only used when the overall timeline alignment is "center" to determine which side of the y-axis the evetns for this sheet will apppear on.)
