@@ -141,8 +141,13 @@ class Timeline extends React.Component {
 
       fetch(url)
       .then(res => {
+        if (res.status !== 200) {
+          console.log('There was an error fetching the spreadsheet data. Status Code: ' +
+            res.status);
+          return;
+        }
+
         res.json().then(data => {
-          console.log(data)
           const headings = data.values[0]
           let rows = [...data.values]
           rows.shift()

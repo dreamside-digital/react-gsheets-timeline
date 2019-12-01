@@ -11,10 +11,10 @@ Demo: [https://nomadic-labs.github.io/react-gsheets-timeline/](https://nomadic-l
 - The colors and icons representing the categories are configurable
 - Toggle the visibility of each category on the timeline
 - Option to add time interval markers markers to show the spacing of the events in the timeline
-- Timeline can be aligned to left, right, or center 
+- Timeline can be aligned to left, right, or center
 - Center alignment displays the y-axis in the center of the timeline, and alternates timeline categories on either side of the timeline
 - Categories can be configured individually to be on the left or right of the y-axis when the timeline is center-aligned
-- No inline styles - easy to override CSS to customize the appearance of the timeline
+- No inline styles - use default styling, use your own stylesheet, or override the default CSS
 
 **Known issues:**
 - Currently optimized for multi-year timelines. Events show up in chronological order down to the day, but time markers have a minimum interval of one year.
@@ -49,9 +49,10 @@ or
 Import into your app:
 
 ```
-import React from 'react';
+import React from 'react'
 
-import Timeline from 'react-gsheets-timeline';
+import Timeline from 'react-gsheets-timeline'
+import "react-gsheets-timeline/dist/timeline.css"
 
 
 const config = {
@@ -113,9 +114,8 @@ The config prop accepts an object in which you can configure the icon and color 
 }
 ```
 
-[Font Awesome 5.0 Free](https://fontawesome.com/icons?d=gallery&m=free) icons are already included in the package.
 
 ### Defaults
 
-The default icons are the square, circle and star from Font Awesome. The timeline categories will rotate through those three if no custom icon is provided. The default colors are "darkcyan", "darkslateblue", and "firebrick". The timeline categories will rotate through them if no custom color is provided.
+The default icons are the square, circle and star from Font Awesome. The timeline categories will rotate through those three if no custom icon is provided. The default colors are "darkcyan", "darkslateblue", "firebrick", "steelblue", and "chocolate". The timeline categories will rotate through them if no custom color is provided.
 

@@ -6,14 +6,18 @@ module.exports = {
     entry: path.join(__dirname, "src/index.js"),
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "index.js"
+        filename: "index.js",
+        library: "react-gsheets-timeline",
+        libraryTarget: 'umd',
+        publicPath: '/dist/',
+        umdNamedDefine: true
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                use: "babel-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                use: ["babel-loader"]
             },
             {
                 test: /\.css$/,
@@ -30,11 +34,26 @@ module.exports = {
             }
         ]
     },
+    externals: {
+        // Don't bundle react or react-dom
+        react: {
+            commonjs: "react",
+            commonjs2: "react",
+            amd: "React",
+            root: "React"
+        },
+        "react-dom": {
+            commonjs: "react-dom",
+            commonjs2: "react-dom",
+            amd: "ReactDOM",
+            root: "ReactDOM"
+        }
+    } ,
     plugins: [
       new MiniCssExtractPlugin({
         filename: 'timeline.css',
       }),
-      new BundleAnalyzerPlugin()
+      // new BundleAnalyzerPlugin()
     ],
     resolve: {
         extensions: [".js", ".jsx"],
