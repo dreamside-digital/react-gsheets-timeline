@@ -104,9 +104,9 @@ class Timeline extends React.Component {
       timelines: {},
       eventList: [],
       intervalMarkers: [],
-      ready: false
+      ready: false,
+      config: { ...defaultConfig, ...this.props.config }
     }
-    this.config = { ...defaultConfig, ...this.props.config }
   }
 
   componentDidMount() {
@@ -114,10 +114,15 @@ class Timeline extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.timelines !== this.state.timelines) {
+    if (prevState.timelines !== this.state.timelines || prevProps.interval !== this.props.interval || prevProps.startYear !== this.props.startYear) {
       this.orderEvents(this.generateEventList())
     }
+
+    if (prevProps.config !== this.props.config) {
+      this.setState({ config: { ...defaultConfig, ...this.props.config }})
+    }
   }
+
 
   handleShowTimeline(sheetId) {
     return () => this.setState({ timelines: {
@@ -234,12 +239,13 @@ class Timeline extends React.Component {
 
     return (
         <div className="nl-timeline">
+          {this.props.showLegend &&
           <div className="legend">
             <h3>Legend</h3>
             {
               map(this.state.timelines, (timeline, sheetId) => {
-                const color = this.config[sheetId] && this.config[sheetId].color ? this.config[sheetId].color : this.config.defaults.colors[timeline.sheetOrder % this.config.defaults.colors.length]
-                const icon = this.config[sheetId] && this.config[sheetId].icon ? this.config[sheetId].icon : this.config.defaults.icons[timeline.sheetOrder % this.config.defaults.icons.length]
+                const color = this.state.config[sheetId] && this.state.config[sheetId].color ? this.state.config[sheetId].color : this.state.config.defaults.colors[timeline.sheetOrder % this.state.config.defaults.colors.length]
+                const icon = this.state.config[sheetId] && this.state.config[sheetId].icon ? this.state.config[sheetId].icon : this.state.config.defaults.icons[timeline.sheetOrder % this.state.config.defaults.icons.length]
                 const styleProperties = {['--timeline-color']: color }
 
                 return (
@@ -255,6 +261,7 @@ class Timeline extends React.Component {
               })
             }
           </div>
+          }
 
           <div className={`timeline align-${this.props.alignment}`}>
             <h3>Events</h3>
@@ -265,12 +272,12 @@ class Timeline extends React.Component {
                 return <Counter event={event} index={index} key={`event-${index}`} />
               }
 
-              const color = this.config[event.sheetId] && this.config[event.sheetId].color ? this.config[event.sheetId].color : this.config.defaults.colors[event.sheetOrder % this.config.defaults.colors.length]
-              const icon = this.config[event.sheetId] && this.config[event.sheetId].icon ? this.config[event.sheetId].icon : this.config.defaults.icons[event.sheetOrder % this.config.defaults.icons.length]
+              const color = this.state.config[event.sheetId] && this.state.config[event.sheetId].color ? this.state.config[event.sheetId].color : this.state.config.defaults.colors[event.sheetOrder % this.state.config.defaults.colors.length]
+              const icon = this.state.config[event.sheetId] && this.state.config[event.sheetId].icon ? this.state.config[event.sheetId].icon : this.state.config.defaults.icons[event.sheetOrder % this.state.config.defaults.icons.length]
               let alignmentClass = (this.props.alignment === "center" && event.sheetOrder % 2 === 0) ? "left" : "right"
 
-              if (this.config[event.sheetId] && this.config[event.sheetId].alignment) {
-                alignmentClass = this.config[event.sheetId].alignment
+              if (this.state.config[event.sheetId] && this.state.config[event.sheetId].alignment) {
+                alignmentClass = this.state.config[event.sheetId].alignment
               }
 
               return <Event key={`event-${index}`} event={event} index={index} color={color} icon={icon} alignmentClass={alignmentClass} />
@@ -290,6 +297,7 @@ Timeline.propTypes = {
   alignment: PropTypes.string,
   interval: PropTypes.number,
   startYear: PropTypes.number,
+  showLegend: PropTypes.boolean,
 }
 
 Timeline.defaultProps = {
@@ -298,6 +306,7 @@ Timeline.defaultProps = {
   apiKey: "",
   config: {},
   alignment: "left",
+  showLegend: true,
 }
 
 export default Timeline;
