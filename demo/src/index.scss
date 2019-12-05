@@ -31,6 +31,7 @@ a {
   flex: 1 1 40%;
   min-width: 300px;
   padding: 10px;
+  margin-bottom: 1em;
 }
 
 .header-content {
@@ -74,4 +75,13 @@ code {
 
 p {
   overflow-wrap: break-word;
+}
+
+fieldset {
+  margin-bottom: 1em;
+  padding: 1em;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  margin-right: 1em;
 }

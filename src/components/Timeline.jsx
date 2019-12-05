@@ -241,7 +241,6 @@ class Timeline extends React.Component {
         <div className="nl-timeline">
           {this.props.showLegend &&
           <div className="legend">
-            <h3>Legend</h3>
             {
               map(this.state.timelines, (timeline, sheetId) => {
                 const color = this.state.config[sheetId] && this.state.config[sheetId].color ? this.state.config[sheetId].color : this.state.config.defaults.colors[timeline.sheetOrder % this.state.config.defaults.colors.length]
@@ -264,7 +263,6 @@ class Timeline extends React.Component {
           }
 
           <div className={`timeline align-${this.props.alignment}`}>
-            <h3>Events</h3>
             <ul>
               <div className="axis" />
             {eventList.map((event, index) => {
