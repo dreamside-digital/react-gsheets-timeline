@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHatCowboySide, faDragon, faSpider } from '@fortawesome/free-solid-svg-icons'
 
-import Timeline from '../../src/components/Timeline';
+import Timeline from '../../src/Timeline';
 
 import "./index.scss"
 

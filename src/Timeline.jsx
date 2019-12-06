@@ -7,7 +7,7 @@ import { faSquare } from '@fortawesome/free-solid-svg-icons/faSquare'
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar'
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus'
 
-import "../scss/timeline.scss"
+import "./timeline.scss"
 
 const defaultConfig = {
   defaults: {
